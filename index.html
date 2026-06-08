@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_8.html -->
+<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_9.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -489,7 +489,7 @@
         <span class="progress-count" id="progressCount">0/10</span>
       </div>
       <div class="progress-bar">
-        <div class="progress-fill" id="progressFill" style="width: 0%;"></div>
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
       </div>
     </div>
 
@@ -730,6 +730,12 @@ function renderHabits() {
     `;
     item.setAttribute('data-habit-id', habit.id);
     item.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleHabit(this.getAttribute('data-habit-id'));
+    });
+    item.addEventListener('touchend', function(e) {
+      e.preventDefault();
       e.stopPropagation();
       toggleHabit(this.getAttribute('data-habit-id'));
     });
