@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_5.html -->
+<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_6.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -806,6 +806,11 @@ function init() {
 
 // BOOT
 if (loadState()) {
+  // se carregou mas nao tem startDate, seta hoje
+  if (!state.startDate) {
+    state.startDate = new Date().toISOString().split('T')[0];
+    saveState();
+  }
   document.getElementById('startDialog').style.display = 'none';
   init();
 }
