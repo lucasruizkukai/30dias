@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_4.html -->
+<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_5.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -493,70 +493,70 @@
       </div>
     </div>
 
-    <div id="habitsList"><div class="habit-item">
+    <div id="habitsList"><div class="habit-item" data-habit-id="gym">
       <div class="checkbox"></div>
       <div class="habit-emoji">🏋️</div>
       <div class="habit-info">
         <div class="habit-name">Treinar na academia</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="food">
       <div class="checkbox"></div>
       <div class="habit-emoji">🥗</div>
       <div class="habit-info">
         <div class="habit-name">Sem fast-food</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="soda">
       <div class="checkbox"></div>
       <div class="habit-emoji">🚫</div>
       <div class="habit-info">
         <div class="habit-name">Sem refrigerante</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="water">
       <div class="checkbox"></div>
       <div class="habit-emoji">💧</div>
       <div class="habit-info">
         <div class="habit-name">Beber 4L de água</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="read">
       <div class="checkbox"></div>
       <div class="habit-emoji">📖</div>
       <div class="habit-info">
         <div class="habit-name">Ler um pouco</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="tasks">
       <div class="checkbox"></div>
       <div class="habit-emoji">✅</div>
       <div class="habit-info">
         <div class="habit-name">Não procrastinar as tarefas do dia</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="sleep">
       <div class="checkbox"></div>
       <div class="habit-emoji">🌙</div>
       <div class="habit-info">
         <div class="habit-name">Dormir antes da meia-noite</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="meditate">
       <div class="checkbox"></div>
       <div class="habit-emoji">🧘</div>
       <div class="habit-info">
         <div class="habit-name">Meditar/relaxar 10 min em silêncio</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="journal">
       <div class="checkbox"></div>
       <div class="habit-emoji">📓</div>
       <div class="habit-info">
         <div class="habit-name">Escrever no caderno de manifestação</div>
         <div class="habit-streak ">sem sequência</div>
       </div>
-    </div><div class="habit-item">
+    </div><div class="habit-item" data-habit-id="nocheat">
       <div class="checkbox"></div>
       <div class="habit-emoji">🤐</div>
       <div class="habit-info">
@@ -728,7 +728,11 @@ function renderHabits() {
         <div class="habit-streak ${streak >= 3 ? 'hot' : ''}">${streak > 0 ? `${streak} dia${streak > 1 ? 's' : ''} seguido${streak > 1 ? 's' : ''}` : 'sem sequência'}</div>
       </div>
     `;
-    item.onclick = () => toggleHabit(habit.id);
+    item.setAttribute('data-habit-id', habit.id);
+    item.addEventListener('click', function(e) {
+      e.stopPropagation();
+      toggleHabit(this.getAttribute('data-habit-id'));
+    });
     list.appendChild(item);
   });
 }
@@ -761,6 +765,7 @@ function selectDay(d) {
 }
 
 function toggleHabit(habitId) {
+  if (!state.startDate) state.startDate = new Date().toISOString().split("T")[0];
   if (!state.data[state.currentDay]) state.data[state.currentDay] = {};
   state.data[state.currentDay][habitId] = !state.data[state.currentDay][habitId];
   saveState();
