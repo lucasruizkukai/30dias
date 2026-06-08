@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_7.html -->
+<!-- saved from url=(0046)file:///C:/Users/Lucas/Downloads/30dias_8.html -->
 <html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -805,11 +805,16 @@ function init() {
 }
 
 // BOOT
-if (loadState() && state.startDate) {
-  document.getElementById('startDialog').style.display = 'none';
-  init();
+const loaded = loadState();
+if (!loaded || !state.startDate) {
+  // primeira vez — seta hoje e começa
+  state.startDate = new Date().toISOString().split('T')[0];
+  state.currentDay = 1;
+  state.data = {};
+  saveState();
 }
-// else: dialog stays visible
+document.getElementById('startDialog').style.display = 'none';
+init();
 </script>
 
 
