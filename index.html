@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<!-- saved from url=(0044)file:///C:/Users/Lucas/Downloads/30dias.html -->
+<html lang="pt-BR"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>30 Dias</title>
+<link href="./index_files/css2" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --card: #1c1c1c;
+    --border: #2a2a2a;
+    --accent: #c9a84c;
+    --accent-dim: #c9a84c30;
+    --accent-glow: #c9a84c15;
+    --text: #e8e4dc;
+    --muted: #5a5652;
+    --success: #4caf7d;
+    --success-dim: #4caf7d20;
+    --danger: #c94c4c;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 24px 16px 80px;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 80% 10%, #c9a84c08 0%, transparent 60%),
+      radial-gradient(ellipse 40% 30% at 10% 80%, #4caf7d06 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    margin-bottom: 36px;
+    padding-top: 8px;
+  }
+
+  .header-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    opacity: 0.8;
+  }
+
+  .header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 48px;
+    font-weight: 900;
+    line-height: 1;
+    color: var(--text);
+    letter-spacing: -1px;
+  }
+
+  .header h1 span {
+    color: var(--accent);
+  }
+
+  .header-sub {
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 28px;
+  }
+
+  .stat {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 10px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* DAY SELECTOR */
+  .day-section {
+    margin-bottom: 28px;
+  }
+
+  .section-label {
+    font-size: 9px;
+    letter-spacing: 3px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .day-grid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 4px;
+  }
+
+  .day-btn {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  .day-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .day-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #0d0d0d;
+    font-weight: 500;
+  }
+
+  .day-btn.complete {
+    background: var(--success-dim);
+    border-color: var(--success);
+    color: var(--success);
+  }
+
+  .day-btn.partial {
+    background: var(--accent-glow);
+    border-color: var(--accent-dim);
+    color: var(--accent);
+    opacity: 0.7;
+  }
+
+  /* HABITS */
+  .habits-section {
+    margin-bottom: 28px;
+  }
+
+  .day-title {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .day-title h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .day-title .day-date {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  .habit-item {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 18px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    cursor: pointer;
+    transition: all 0.25s;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .habit-item:hover {
+    border-color: var(--accent-dim);
+    background: var(--card);
+  }
+
+  .habit-item.checked {
+    border-color: var(--success);
+    background: var(--success-dim);
+  }
+
+  .habit-item.checked .habit-name {
+    color: var(--success);
+  }
+
+  .habit-item.checked .habit-emoji {
+    filter: none;
+  }
+
+  .checkbox {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    border: 1.5px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    font-size: 12px;
+  }
+
+  .habit-item.checked .checkbox {
+    background: var(--success);
+    border-color: var(--success);
+  }
+
+  .habit-emoji {
+    font-size: 20px;
+    flex-shrink: 0;
+    filter: grayscale(0.3);
+  }
+
+  .habit-info {
+    flex: 1;
+  }
+
+  .habit-name {
+    font-size: 13px;
+    color: var(--text);
+    font-weight: 400;
+    line-height: 1.3;
+    transition: color 0.2s;
+  }
+
+  .habit-streak {
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  .habit-streak.hot {
+    color: var(--accent);
+  }
+
+  /* PROGRESS BAR */
+  .day-progress {
+    margin-bottom: 20px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+
+  .progress-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .progress-label {
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .progress-count {
+    font-size: 10px;
+    color: var(--accent);
+  }
+
+  .progress-bar {
+    height: 4px;
+    background: var(--border);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success), var(--accent));
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+
+  /* RESET BUTTON */
+  .reset-btn {
+    display: block;
+    width: 100%;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-top: 16px;
+  }
+
+  .reset-btn:hover {
+    border-color: var(--danger);
+    color: var(--danger);
+  }
+
+  /* TOAST */
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--surface);
+    border: 1px solid var(--accent);
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 1px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    transition: transform 0.3s ease;
+    z-index: 100;
+    white-space: nowrap;
+  }
+
+  .toast.show {
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* CONFETTI STAR */
+  @keyframes pop {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+  }
+
+  .habit-item.checked {
+    animation: pop 0.3s ease;
+  }
+
+  /* START DIALOG */
+  .dialog-overlay {
+    position: fixed;
+    inset: 0;
+    background: #0d0d0dcc;
+    backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+    padding: 24px;
+  }
+
+  .dialog {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    max-width: 360px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .dialog h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 900;
+    margin-bottom: 10px;
+  }
+
+  .dialog p {
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  .dialog-btn {
+    background: var(--accent);
+    color: #0d0d0d;
+    border: none;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    padding: 14px 28px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: opacity 0.2s;
+  }
+
+  .dialog-btn:hover { opacity: 0.85; }
+
+  .dialog-secondary {
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--muted);
+    margin-top: 10px;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+  <div class="header">
+    <div class="header-label">Desafio pessoal</div>
+    <h1>30 <span>dias</span></h1>
+    <div class="header-sub" id="dateRange">07 de jun. — 06 de jul.</div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat">
+      <div class="stat-value" id="statDay">1</div>
+      <div class="stat-label">Dia atual</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="statDone">0</div>
+      <div class="stat-label">Completos</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value" id="statStreak">0</div>
+      <div class="stat-label">Streak</div>
+    </div>
+  </div>
+
+  <div class="day-section">
+    <div class="section-label">Selecionar dia</div>
+    <div class="day-grid" id="dayGrid"><button class="day-btn active">1</button><button class="day-btn">2</button><button class="day-btn" style="opacity: 0.3;">3</button><button class="day-btn" style="opacity: 0.3;">4</button><button class="day-btn" style="opacity: 0.3;">5</button><button class="day-btn" style="opacity: 0.3;">6</button><button class="day-btn" style="opacity: 0.3;">7</button><button class="day-btn" style="opacity: 0.3;">8</button><button class="day-btn" style="opacity: 0.3;">9</button><button class="day-btn" style="opacity: 0.3;">10</button><button class="day-btn" style="opacity: 0.3;">11</button><button class="day-btn" style="opacity: 0.3;">12</button><button class="day-btn" style="opacity: 0.3;">13</button><button class="day-btn" style="opacity: 0.3;">14</button><button class="day-btn" style="opacity: 0.3;">15</button><button class="day-btn" style="opacity: 0.3;">16</button><button class="day-btn" style="opacity: 0.3;">17</button><button class="day-btn" style="opacity: 0.3;">18</button><button class="day-btn" style="opacity: 0.3;">19</button><button class="day-btn" style="opacity: 0.3;">20</button><button class="day-btn" style="opacity: 0.3;">21</button><button class="day-btn" style="opacity: 0.3;">22</button><button class="day-btn" style="opacity: 0.3;">23</button><button class="day-btn" style="opacity: 0.3;">24</button><button class="day-btn" style="opacity: 0.3;">25</button><button class="day-btn" style="opacity: 0.3;">26</button><button class="day-btn" style="opacity: 0.3;">27</button><button class="day-btn" style="opacity: 0.3;">28</button><button class="day-btn" style="opacity: 0.3;">29</button><button class="day-btn" style="opacity: 0.3;">30</button></div>
+  </div>
+
+  <div class="habits-section">
+    <div class="day-title">
+      <h2 id="dayTitle">Dia 1</h2>
+      <span class="day-date" id="dayDate">07 de jun.</span>
+    </div>
+
+    <div class="day-progress">
+      <div class="progress-header">
+        <span class="progress-label">Progresso do dia</span>
+        <span class="progress-count" id="progressCount">0/10</span>
+      </div>
+      <div class="progress-bar">
+        <div class="progress-fill" id="progressFill" style="width:0%"></div>
+      </div>
+    </div>
+
+    <div id="habitsList"><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">🏋️</div>
+      <div class="habit-info">
+        <div class="habit-name">Treinar na academia</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">🥗</div>
+      <div class="habit-info">
+        <div class="habit-name">Sem fast-food</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">🚫</div>
+      <div class="habit-info">
+        <div class="habit-name">Sem refrigerante</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">💧</div>
+      <div class="habit-info">
+        <div class="habit-name">Beber 4L de água</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">📖</div>
+      <div class="habit-info">
+        <div class="habit-name">Ler um pouco</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">✅</div>
+      <div class="habit-info">
+        <div class="habit-name">Não procrastinar as tarefas do dia</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">🌙</div>
+      <div class="habit-info">
+        <div class="habit-name">Dormir antes da meia-noite</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">🧘</div>
+      <div class="habit-info">
+        <div class="habit-name">Meditar/relaxar 10 min em silêncio</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">📓</div>
+      <div class="habit-info">
+        <div class="habit-name">Escrever no caderno de manifestação</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div><div class="habit-item">
+      <div class="checkbox"></div>
+      <div class="habit-emoji">🤐</div>
+      <div class="habit-info">
+        <div class="habit-name">Não reclamar</div>
+        <div class="habit-streak ">sem sequência</div>
+      </div>
+    </div></div>
+
+    <button class="reset-btn" onclick="confirmReset()">Reiniciar desafio</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="dialog-overlay" id="startDialog" style="display: none;">
+  <div class="dialog">
+    <h2>Pronto?</h2>
+    <p>Você vai começar o desafio de 30 dias hoje. Os hábitos serão registrados por dia a partir de agora.</p>
+    <button class="dialog-btn" onclick="startChallenge()">Começar hoje</button>
+    <button class="dialog-btn dialog-secondary" onclick="loadExisting()">Já comecei, carregar dados</button>
+  </div>
+</div>
+
+<script>
+const HABITS = [
+  { id: 'gym',       emoji: '🏋️', name: 'Treinar na academia' },
+  { id: 'food',      emoji: '🥗', name: 'Sem fast-food' },
+  { id: 'soda',      emoji: '🚫', name: 'Sem refrigerante' },
+  { id: 'water',     emoji: '💧', name: 'Beber 4L de água' },
+  { id: 'read',      emoji: '📖', name: 'Ler um pouco' },
+  { id: 'tasks',     emoji: '✅', name: 'Não procrastinar as tarefas do dia' },
+  { id: 'sleep',     emoji: '🌙', name: 'Dormir antes da meia-noite' },
+  { id: 'meditate',  emoji: '🧘', name: 'Meditar/relaxar 10 min em silêncio' },
+  { id: 'journal',   emoji: '📓', name: 'Escrever no caderno de manifestação' },
+  { id: 'nocheat',   emoji: '🤐', name: 'Não reclamar' },
+];
+
+let state = {
+  startDate: null,
+  currentDay: 1,
+  data: {} // { "1": { gym: true, ... }, ... }
+};
+
+function saveState() {
+  localStorage.setItem('30dias_v2', JSON.stringify(state));
+}
+
+function loadState() {
+  const raw = localStorage.getItem('30dias_v2');
+  if (raw) {
+    state = JSON.parse(raw);
+    return true;
+  }
+  return false;
+}
+
+function startChallenge() {
+  state.startDate = new Date().toISOString().split('T')[0];
+  state.currentDay = 1;
+  state.data = {};
+  saveState();
+  document.getElementById('startDialog').style.display = 'none';
+  init();
+}
+
+function loadExisting() {
+  document.getElementById('startDialog').style.display = 'none';
+  init();
+}
+
+function getTodayDay() {
+  if (!state.startDate) return 1;
+  const start = new Date(state.startDate);
+  const today = new Date();
+  const diff = Math.floor((today - start) / (1000 * 60 * 60 * 24)) + 1;
+  return Math.min(Math.max(diff, 1), 30);
+}
+
+function getDayLabel(dayNum) {
+  if (!state.startDate) return '';
+  const start = new Date(state.startDate);
+  start.setDate(start.getDate() + dayNum - 1);
+  return start.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+}
+
+function getDateRange() {
+  if (!state.startDate) return '';
+  const start = new Date(state.startDate);
+  const end = new Date(state.startDate);
+  end.setDate(end.getDate() + 29);
+  const fmt = d => d.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+  return `${fmt(start)} — ${fmt(end)}`;
+}
+
+function getDayData(day) {
+  return state.data[day] || {};
+}
+
+function getCheckedCount(day) {
+  const d = getDayData(day);
+  return HABITS.filter(h => d[h.id]).length;
+}
+
+function isDayComplete(day) {
+  return getCheckedCount(day) === HABITS.length;
+}
+
+function calcStreak() {
+  const today = getTodayDay();
+  let streak = 0;
+  for (let d = today; d >= 1; d--) {
+    if (isDayComplete(d)) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function calcCompleteDays() {
+  let count = 0;
+  for (let d = 1; d <= 30; d++) {
+    if (isDayComplete(d)) count++;
+  }
+  return count;
+}
+
+function getHabitStreak(habitId) {
+  const today = getTodayDay();
+  let streak = 0;
+  for (let d = today; d >= 1; d--) {
+    if (state.data[d] && state.data[d][habitId]) streak++;
+    else break;
+  }
+  return streak;
+}
+
+function renderDayGrid() {
+  const grid = document.getElementById('dayGrid');
+  const today = getTodayDay();
+  grid.innerHTML = '';
+  for (let d = 1; d <= 30; d++) {
+    const btn = document.createElement('button');
+    btn.className = 'day-btn';
+    btn.textContent = d;
+    if (d === state.currentDay) btn.classList.add('active');
+    else if (isDayComplete(d)) btn.classList.add('complete');
+    else if (getCheckedCount(d) > 0) btn.classList.add('partial');
+    if (d > today + 1) btn.style.opacity = '0.3';
+    btn.onclick = () => selectDay(d);
+    grid.appendChild(btn);
+  }
+}
+
+function renderHabits() {
+  const list = document.getElementById('habitsList');
+  const dayData = getDayData(state.currentDay);
+  list.innerHTML = '';
+
+  HABITS.forEach(habit => {
+    const checked = !!dayData[habit.id];
+    const streak = getHabitStreak(habit.id);
+
+    const item = document.createElement('div');
+    item.className = 'habit-item' + (checked ? ' checked' : '');
+    item.innerHTML = `
+      <div class="checkbox">${checked ? '✓' : ''}</div>
+      <div class="habit-emoji">${habit.emoji}</div>
+      <div class="habit-info">
+        <div class="habit-name">${habit.name}</div>
+        <div class="habit-streak ${streak >= 3 ? 'hot' : ''}">${streak > 0 ? `${streak} dia${streak > 1 ? 's' : ''} seguido${streak > 1 ? 's' : ''}` : 'sem sequência'}</div>
+      </div>
+    `;
+    item.onclick = () => toggleHabit(habit.id);
+    list.appendChild(item);
+  });
+}
+
+function renderProgress() {
+  const count = getCheckedCount(state.currentDay);
+  const pct = (count / HABITS.length) * 100;
+  document.getElementById('progressCount').textContent = `${count}/${HABITS.length}`;
+  document.getElementById('progressFill').style.width = `${pct}%`;
+}
+
+function renderStats() {
+  const today = getTodayDay();
+  document.getElementById('statDay').textContent = today;
+  document.getElementById('statDone').textContent = calcCompleteDays();
+  document.getElementById('statStreak').textContent = calcStreak();
+  document.getElementById('dateRange').textContent = getDateRange();
+}
+
+function selectDay(d) {
+  const today = getTodayDay();
+  if (d > today + 1) { showToast('Este dia ainda não chegou'); return; }
+  state.currentDay = d;
+  saveState();
+  document.getElementById('dayTitle').textContent = `Dia ${d}`;
+  document.getElementById('dayDate').textContent = getDayLabel(d);
+  renderDayGrid();
+  renderHabits();
+  renderProgress();
+}
+
+function toggleHabit(habitId) {
+  if (!state.data[state.currentDay]) state.data[state.currentDay] = {};
+  state.data[state.currentDay][habitId] = !state.data[state.currentDay][habitId];
+  saveState();
+
+  const count = getCheckedCount(state.currentDay);
+  if (count === HABITS.length) showToast('Dia completo! 🔥');
+
+  renderDayGrid();
+  renderHabits();
+  renderProgress();
+  renderStats();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+function confirmReset() {
+  if (confirm('Tem certeza? Todo o progresso será apagado.')) {
+    localStorage.removeItem('30dias_v2');
+    location.reload();
+  }
+}
+
+function init() {
+  const today = getTodayDay();
+  if (!state.currentDay || state.currentDay < 1) state.currentDay = today;
+  document.getElementById('dayTitle').textContent = `Dia ${state.currentDay}`;
+  document.getElementById('dayDate').textContent = getDayLabel(state.currentDay);
+  renderStats();
+  renderDayGrid();
+  renderHabits();
+  renderProgress();
+}
+
+// BOOT
+if (loadState()) {
+  document.getElementById('startDialog').style.display = 'none';
+  init();
+}
+// else: dialog stays visible
+</script>
+
+
+</body></html>
